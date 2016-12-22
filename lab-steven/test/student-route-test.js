@@ -6,6 +6,8 @@ const Student = require('../model/student.js');
 const PORT = process.env.PORT || 8080;
 const url = `http://localhost:${PORT}`;
 
+require('../server.js');
+
 const sampleStudent = {
   name: 'Test student',
   age: 42
