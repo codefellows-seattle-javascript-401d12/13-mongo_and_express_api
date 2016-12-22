@@ -17,6 +17,10 @@ studentRouter.post('/api/student', parseJSON, (request, response, next) => {
 
 studentRouter.put('/api/student/:id', parseJSON, (request, response, next) => {
   debug('Student router PUT: /api/student/:id');
+  if (Object.keys(request.body).length < 1) {
+    response.status(400).send();
+    throw new Error('No content passed in.');
+  }
 
   request.body.timestamp = new Date();
   Student.findByIdAndUpdate(request.params.id, request.body, {new: true})

@@ -17,8 +17,8 @@ describe('Student Routes', function() {
   describe('POST: /api/student', function() {
     describe('With a valid body passed in', function() {
       after(done => {
-        Student.findByIdAndRemove(this.tempStudent.id)
-        .then(() => done)
+        Student.findByIdAndRemove(this.tempStudent._id)
+        .then(() => done())
         .catch(done);
       });
 
@@ -66,7 +66,7 @@ describe('Student Routes', function() {
     afterEach(done => {
       delete sampleStudent.timestamp;
       if (this.tempStudent) {
-        Student.findByIdAndRemove(this.tempStudent.id)
+        Student.findByIdAndRemove(this.tempStudent._id)
         .then(() => done())
         .catch(done);
         return;
@@ -130,7 +130,7 @@ describe('Student Routes', function() {
     afterEach(done => {
       delete sampleStudent.timestamp;
       if (this.tempStudent) {
-        Student.findByIdAndRemove(this.tempStudent.id)
+        Student.findByIdAndRemove(this.tempStudent._id)
         .then(() => done())
         .catch(done);
         return;
@@ -171,10 +171,9 @@ describe('Student Routes', function() {
       it('Should return a 500 error.', done => {
         request
         .put(`${url}/api/student/${this.tempStudent._id}`)
-        .send({badObject: 'Sure is'})
         .end((err, response) => {
           expect(err).to.be.an('error');
-          expect(response.status).to.equal(500);
+          expect(response.status).to.equal(400);
           expect(response.body.name).to.equal(undefined);
           done();
         });
