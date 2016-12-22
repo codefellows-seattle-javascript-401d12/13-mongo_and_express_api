@@ -150,5 +150,33 @@ describe('Student Routes', function() {
         });
       });
     });
+
+    describe('With a valid body, but invalid ID.', () => {
+      it('Should return a 500 error.', done => {
+        request
+        .put(`${url}/api/student/69`)
+        .send({name: 'Weasel', age: 40})
+        .end((err, response) => {
+          expect(err).to.be.an('error');
+          expect(response.status).to.equal(500);
+          expect(response.body.name).to.equal(undefined);
+          done();
+        });
+      });
+    });
+
+    describe('With a valid ID, but an invalid body.', () => {
+      it('Should return a 500 error.', done => {
+        request
+        .put(`${url}/api/student/${this.tempStudent._id}`)
+        .send({badObject: 'Sure is'})
+        .end((err, response) => {
+          expect(err).to.be.an('error');
+          expect(response.status).to.equal(500);
+          expect(response.body.name).to.equal(undefined);
+          done();
+        });
+      });
+    });
   });
 });
