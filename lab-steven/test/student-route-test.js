@@ -51,28 +51,28 @@ describe('Student Routes', function() {
   });
 
   describe('GET routes.', function() {
-    describe('With a valid ID', function() {
-      before(done => {
-        sampleStudent.timestamp = new Date();
-        new Student(sampleStudent).save()
-        .then(student => {
-          this.tempStudent = student;
-          done();
-        })
-        .catch(done);
-      });
-
-      after(done => {
-        delete sampleStudent.timestamp;
-        if (this.tempStudent) {
-          Student.findByIdAndRemove(this.tempStudent.id)
-          .then(() => done())
-          .catch(done);
-          return;
-        }
+    beforeEach(done => {
+      sampleStudent.timestamp = new Date();
+      new Student(sampleStudent).save()
+      .then(student => {
+        this.tempStudent = student;
         done();
-      });
+      })
+      .catch(done);
+    });
 
+    afterEach(done => {
+      delete sampleStudent.timestamp;
+      if (this.tempStudent) {
+        Student.findByIdAndRemove(this.tempStudent.id)
+        .then(() => done())
+        .catch(done);
+        return;
+      }
+      done();
+    });
+
+    describe('With a valid ID', () => {
       it('Should return a student.', done => {
         request
         .get(`${url}/api/student/${this.tempStudent._id}`)
@@ -86,7 +86,7 @@ describe('Student Routes', function() {
       });
     });
 
-    describe('With an invalid ID', function() {
+    describe('With an invalid ID', () => {
       it('Should return a 500 status error.', done => {
         request
         .get(`${url}/api/student/69`)
@@ -94,6 +94,20 @@ describe('Student Routes', function() {
           expect(err).to.be.an('error');
           expect(response.status).to.equal(500);
           expect(response.body.name).to.equal(undefined);
+          done();
+        });
+      });
+    });
+
+    describe('With no ID.', () => {
+      it('Should return an array of IDs.', done => {
+        request
+        .get(`${url}/api/student`)
+        .end((err, response) => {
+          if (err) return done(err);
+          expect(response.body).to.be.an('array');
+          expect(response.body.length).to.be.at.least(1);
+          expect(response.status).to.equal(200);
           done();
         });
       });
