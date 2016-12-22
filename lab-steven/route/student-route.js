@@ -23,3 +23,11 @@ studentRouter.put('/api/student/:id', parseJSON, (request, response, next) => {
   .then(student => response.json(student))
   .catch(next);
 });
+
+studentRouter.get('/api/student/:id', (request, response, next) => {
+  debug('Student router GET: /api/student/:id');
+
+  Student.findById(request.params.id)
+  .then(student => response.json(student))
+  .catch(next);
+});
