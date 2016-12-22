@@ -113,4 +113,42 @@ describe('Student Routes', function() {
       });
     });
   });
+
+  describe('PUT routes.', function() {
+    beforeEach(done => {
+      sampleStudent.timestamp = new Date();
+      new Student(sampleStudent).save()
+      .then(student => {
+        this.tempStudent = student;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach(done => {
+      delete sampleStudent.timestamp;
+      if (this.tempStudent) {
+        Student.findByIdAndRemove(this.tempStudent.id)
+        .then(() => done())
+        .catch(done);
+        return;
+      }
+      done();
+    });
+
+    describe('With a valid ID', () => {
+      it('Should return an updated student.', done => {
+        request
+        .put(`${url}/api/student/${this.tempStudent._id}`)
+        .send({name: 'Weasel', age: 40})
+        .end((err, response) => {
+          if (err) return done(err);
+          expect(response.status).to.equal(200);
+          expect(response.body.name).to.equal('Weasel');
+          expect(response.body.age).to.equal(40);
+          done();
+        });
+      });
+    });
+  });
 });
