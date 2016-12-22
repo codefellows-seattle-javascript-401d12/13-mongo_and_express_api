@@ -179,4 +179,42 @@ describe('Student Routes', function() {
       });
     });
   });
+
+  describe('DELETE routes.', function() {
+    describe('With a valid ID.', function() {
+      before(done => {
+        sampleStudent.timestamp = new Date();
+        new Student(sampleStudent).save()
+        .then(student => {
+          this.tempStudent = student;
+          done();
+        })
+        .catch(done);
+      });
+
+      it('Should return a 204 status.', done => {
+        request
+        .delete(`${url}/api/student/${this.tempStudent._id}`)
+        .end((err, response) => {
+          if (err) return done(err);
+          expect(response.status).to.equal(204);
+          expect(response.body.name).to.equal(undefined);
+          done();
+        });
+      });
+    });
+
+    describe('With an invalid ID.', function() {
+      it('Should return a 500 error.', done => {
+        request
+        .delete(`${url}/api/student/69`)
+        .end((err, response) => {
+          expect(err).to.be.an('error');
+          expect(response.status).to.equal(500);
+          expect(response.body.name).to.equal(undefined);
+          done();
+        });
+      });
+    });
+  });
 });
