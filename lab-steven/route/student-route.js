@@ -19,5 +19,7 @@ studentRouter.put('/api/student/:id', parseJSON, (request, response, next) => {
   debug('Student router PUT: /api/student/:id');
 
   request.body.timestamp = new Date();
-  Student.
+  Student.findOneAndUpdate({_id: request.params.id}, request.body)
+  .then(student => response.json(student))
+  .catch(next);
 });
