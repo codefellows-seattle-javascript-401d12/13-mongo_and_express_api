@@ -45,7 +45,7 @@ moviesRouter.put('/api/movies/:id', jsonparser, function(req, res, next) {
 moviesRouter.delete('/api/movies/:id', function(req, res, next) {
   debug('DELETE: /api/movies/:id');
 
-  Movie.findById(req.params.id).remove().exec()
+  Movie.findByIdAndRemove(req.params.id)
     .then( () => res.status(204).end())
     .catch(next);
 });
