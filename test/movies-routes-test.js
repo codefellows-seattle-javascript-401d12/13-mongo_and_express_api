@@ -19,8 +19,7 @@ describe('Movie Routes', function() {
     describe('Valid Body', function() {
       after( done => {
         if(this.tempMovie) {
-          //TODO: remove the temp movie created. not all movies
-          Movies.remove({})
+          Movies.findByIdAndRemove(this.tempMovie._id)
             .then( () => done())
             .catch(done);
           return;
@@ -89,8 +88,7 @@ describe('Movie Routes', function() {
       });
       after( done => {
         if(this.tempMovie) {
-          //TODO: remove the temp movie created. not all movies
-          Movies.remove({})
+          Movies.findByIdAndRemove(this.tempMovie._id)
             .then( () => done())
             .catch(done);
           return;
@@ -102,6 +100,28 @@ describe('Movie Routes', function() {
           .end( (err, res) => {
             if(err) return done(err);
             expect(res.status).to.equal(200);
+            done();
+          });
+      });
+      it('should have properties of name and rating', done => {
+        request.get(`${url}/api/movies/${this.tempMovie._id}`)
+          .end( (err, res) => {
+            if(err) return done(err);
+            expect(res.body).to.include.keys('name');
+            expect(res.body).to.include.keys('rating');
+            done();
+          });
+      });
+      it('rating should be a number and name a string', done => {
+        expect(this.tempMovie.name).to.be.a('string');
+        expect(this.tempMovie.rating).to.be.a('number');
+        done();
+      });
+      it('rating and number values should equal exampleMovie object', done => {
+        request.get(`${url}/api/movies/${this.tempMovie._id}`)
+          .end( (err, res) => {
+            expect(res.body.name).to.equal(exampleMovie.name);
+            expect(res.body.rating).to.equal(exampleMovie.rating);
             done();
           });
       });
@@ -130,8 +150,7 @@ describe('Movie Routes', function() {
       });
       after( done => {
         if(this.tempMovie) {
-          //TODO: remove the temp movie created. not all movies
-          Movies.remove({})
+          Movies.findByIdAndRemove(this.tempMovie._id)
             .then( () => done())
             .catch(done);
           return;
@@ -195,7 +214,7 @@ describe('Movie Routes', function() {
           })
           .catch(done);
       });
-      it('should respond with status 200', done => {
+      it('should respond with status 204', done => {
         request.delete(`${url}/api/movies/${this.tempMovie._id}`)
           .end( (err, res) => {
             if(err) return done(err);
@@ -205,7 +224,7 @@ describe('Movie Routes', function() {
       });
     });
     describe('Invalid Body', function() {
-      it('should respond with status 200', done => {
+      it('should respond with status 500', done => {
         request.delete(`${url}/api/movies/123456789`)
           .end( res => {
             expect(res.status).to.equal(500);

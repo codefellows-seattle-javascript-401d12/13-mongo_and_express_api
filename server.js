@@ -7,8 +7,7 @@ const cors = require('cors');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const movieRouter = require('./routes/movies-routes.js');
-//TODO: Require in error middleware
-
+const errors = require('./lib/error-middleware.js');
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -20,7 +19,7 @@ mongoose.connect(MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(movieRouter);
-//TODO: add app.use(error-middlware)
+app.use(errors);
 
 app.listen(PORT , () => {
   debug(`Server Up: ${PORT}`);
