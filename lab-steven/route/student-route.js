@@ -19,7 +19,7 @@ studentRouter.put('/api/student/:id', parseJSON, (request, response, next) => {
   debug('Student router PUT: /api/student/:id');
 
   request.body.timestamp = new Date();
-  Student.findOneAndUpdate({_id: request.params.id}, request.body)
+  Student.findByIdAndUpdate(request.params.id, request.body)
   .then(student => response.json(student))
   .catch(next);
 });
@@ -36,6 +36,14 @@ studentRouter.get('/api/student', (request, response, next) => {
   debug('Student router GET: /api/student');
 
   Student.find()
-  .then(arrayOfStudents => arrayOfStudents.map(ele => ele._id))
+  .then(arrayOfStudents => response.json(arrayOfStudents.map(ele => ele._id)))
+  .catch(next);
+});
+
+studentRouter.delete('/api/student/:id', (request, response, next) => {
+  debug('Student router DELETE: /api/student/:id');
+
+  Student.findByIdAndRemove(request.params.id)
+  .then(() => response.status(204).send())
   .catch(next);
 });
