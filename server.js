@@ -11,12 +11,12 @@ const movieRouter = require('./routes/movies-routes.js');
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-const MONGODB_URI = process.env.MONGO_LIST_URI_ACCESS;
+const MONGODB_URI =  process.env.MONGO_LIST_URI_ACCESS || 'mongodb://localhost/movies';
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
-app.use(cors);
+app.use(cors());
 app.use(morgan('dev'));
 app.use(movieRouter);
 
