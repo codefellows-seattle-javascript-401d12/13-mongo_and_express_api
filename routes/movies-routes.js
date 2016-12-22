@@ -15,6 +15,13 @@ moviesRouter.post('/api/movies', jsonparser, function(req, res, next) {
     .catch(next);
 });
 
+moviesRouter.get('/api/movies/:id', function(req, res, next) {
+  debug('GET: /api/movies');
+
+  Movie.findById(req.params.id)
+    .then( movie => res.json(movie))
+    .catch(next);
+});
 //TODO: Create a get route
   //find movies by id from movie constructor
   //should pass the id of a resource through the url endpoint to get a resource
