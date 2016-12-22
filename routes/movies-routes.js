@@ -1,15 +1,19 @@
 'use strict';
 
-//TODO: require express router constructor
-//TODO: require debug
-//TODO: require body parser json methods
-//TODO: require movies model constructor
-//TODO: create a new movies router and export it to a new Router constructor
+const Router = require('express').Router;
+const debug = require('debug')('movies:movies-routes');
+const jsonparser = require('body-parser').json();
+const Movie = require('../model/movies.js');
+const moviesRouter = module.exports = new Router();
 
-//TODO: Create a post route
-  //post route needs time stamp
-  //New movie constructor
-  //should pass data as stringifed JSON in the body of a post request to create a new resource
+moviesRouter.post('/api/movies', jsonparser, function(req, res, next) {
+  debug('POST: /api/movies');
+
+  req.body.timestamp = new Date();
+  new Movie(req.body).save()
+    .then( movie => res.json(movie))
+    .catch(next);
+});
 
 //TODO: Create a get route
   //find movies by id from movie constructor
