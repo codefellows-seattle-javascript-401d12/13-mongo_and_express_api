@@ -14,3 +14,12 @@ pinRouter.post('/api/pin', jsonParser, function(req, res, next) {
   .then(pin => res.json(pin))
   .catch(next);
 });
+
+pinRouter.put('/api/pin/:id', jsonParser, function(req, res, next) {
+  debug('PUT: /api/pin/:id');
+
+  req.body.timestamp = new Date();
+  Pin.findByIdAndUpdate(req.params.id, req.body)
+  .then(pin => res.json(pin))
+  .catch(next);
+});
