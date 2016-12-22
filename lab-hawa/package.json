@@ -1,0 +1,32 @@
+{
+  "name": "lab-hawa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "DEBUG='spiritAnimal*' node server.js",
+    "test": "DEBUG='spiritAnimal*' mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
+    "cors": "^2.8.1",
+    "debug": "^2.5.1",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.4",
+    "morgan": "^1.7.0",
+    "superagent": "^3.3.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "superagent": "^3.3.1"
+  }
+}
