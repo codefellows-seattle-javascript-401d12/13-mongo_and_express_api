@@ -31,3 +31,11 @@ studentRouter.get('/api/student/:id', (request, response, next) => {
   .then(student => response.json(student))
   .catch(next);
 });
+
+studentRouter.get('/api/student', (request, response, next) => {
+  debug('Student router GET: /api/student');
+
+  Student.find()
+  .then(arrayOfStudents => arrayOfStudents.map(ele => ele._id))
+  .catch(next);
+});
