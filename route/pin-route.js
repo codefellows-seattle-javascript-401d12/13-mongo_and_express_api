@@ -23,3 +23,11 @@ pinRouter.put('/api/pin/:id', jsonParser, function(req, res, next) {
   .then(pin => res.json(pin))
   .catch(next);
 });
+
+pinRouter.get('/api/pin/:id', function(req, res, next) {
+  debug('GET: /api/pin/:id');
+
+  Pin.findById(req.params.id)
+  .then(pin => res.json(pin))
+  .catch(next);
+});
