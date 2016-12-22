@@ -9,10 +9,10 @@ require('../server.js');
 
 const url = `http://localhost:${PORT}`;
 const exampleSpiritAnimal = {
-  SpiritAnimalName: 'test spirit animal name'
+  spiritAnimalName: 'test spiritAnimal name'
 };
 
-describe('Spirit Animal Routes', function() {
+describe('SpiritAnimal Routes', function() {
   describe('POST: /api/spiritAnimal', function () {
     describe('with a valid body', function() {
       after(done => {
@@ -31,7 +31,7 @@ describe('Spirit Animal Routes', function() {
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.spiritAnimalName).to.equal('test spirit animal name');
+          expect(res.body.spiritAnimalName).to.equal('test spiritAnimal name');
           this.tempSpiritAnimal = res.body;
           done();
         });
@@ -51,7 +51,7 @@ describe('Spirit Animal Routes', function() {
         .catch(done);
       });
 
-      it('should return a spiritAnimal', done => {
+      it('should return a spirit animal', done => {
         request.get(`${url}/api/spiritAnimal/${this.spiritAnimalBirthday._id}`)
         .end((err, res) => {
           if (err) return done(err);
