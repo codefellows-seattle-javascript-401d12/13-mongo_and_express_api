@@ -3,18 +3,22 @@
 const express = require('express');
 const debug = require('debug')('movies:server');
 const morgan = require('morgan');
-//TODO: require in cors, bluebird, mongoose, movies router
+const cors = require('cors');
+const Promise = require('bluebird');
+const mongoose = require('mongoose');
+const movieRouter = require('./routes/movies-routes.js');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-//TODO: create const for mongoose URI  ***  mongoListURI
+const MONGODB_URI = process.env.MONGO_LIST_URI_ACCESS;
 
-//TODO: promiseify mongoose and connect mongoose
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 
-//TODO: add middleware cors
+app.use(cors);
 app.use(morgan('dev'));
-//TODO: add middleware router
+app.use(movieRouter);
 
 app.listen(PORT , () => {
   debug(`Server Up: ${PORT}`);

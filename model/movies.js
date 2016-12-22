@@ -1,8 +1,12 @@
 'use strict';
 
-//TODO: require mongoose
-//TODO: create mongoose Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-//TODO: create schema object
+const movieSchema = Schema({
+  name: { type: String, required: true},
+  rating: { type: Number, required: true},
+  timestamp: { type: Date, required: true}
+});
 
-//TODO: set up mongoose model to export schema object
+module.exports = mongoose.model('movies', movieSchema);
