@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "DEBUG='list*' mocha",
-    "start": "DEBUG='list*' node server.js"
+    "test": "DEBUG='pin*' mocha",
+    "start": "DEBUG='pin*' node server.js"
   },
   "repository": {
     "type": "git",

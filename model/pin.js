@@ -9,4 +9,4 @@ const pinSchema = Schema({
   timestamp: { type: Date, required: true }
 });
 
-module.exports = mongoose.model('list', pinSchema);
+module.exports = mongoose.model('pin', pinSchema);
