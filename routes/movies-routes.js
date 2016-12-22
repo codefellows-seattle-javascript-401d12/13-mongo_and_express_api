@@ -22,15 +22,30 @@ moviesRouter.get('/api/movies/:id', function(req, res, next) {
     .then( movie => res.json(movie))
     .catch(next);
 });
-//TODO: Create a get route
-  //find movies by id from movie constructor
-  //should pass the id of a resource through the url endpoint to get a resource
-    //this should use `req.params`, not querystring parameters
 
-//TODO: Create a put route
-  //should pass data as stringifed JSON in the body of a put request to update a pre-existing resource
+moviesRouter.put('/api/movies/:id', jsonparser, function(req, res, next) {
+  debug('PUT: /api/movies/:id');
 
-//TODO: Create a delete route
-  //should pass the id of a resource though the url endpoint to delete a resource
-    //this should use `req.params`
-    //res should have status of 204 and then end
+  Movie.findById(req.params.id)
+    .then( movie => {
+      for (var prop in req.body) {
+        if (req.body.hasOwnProperty(prop)) {
+          movie[prop] = req.body[prop];
+          movie.timestamp = new Date();
+        }
+      }
+      movie.save( err => {
+        if(err) res.send(err);
+        res.json(movie);
+      });
+    })
+    .catch(next);
+});
+
+moviesRouter.delete('/api/movies/:id', function(req, res, next) {
+  debug('DELETE: /api/movies/:id');
+
+  Movie.findById(req.params.id).remove().exec()
+    .then( () => res.status(204).end())
+    .catch(next);
+});
