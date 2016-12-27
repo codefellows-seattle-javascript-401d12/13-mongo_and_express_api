@@ -130,7 +130,7 @@ describe('Movie Routes', function() {
       it('should respond with an error', done => {
         request.get(`${url}/api/movies/123456789`)
           .end( res => {
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(404);
             done();
           });
       });
@@ -197,7 +197,7 @@ describe('Movie Routes', function() {
       it('should respond with a status of 500', done => {
         request.put(`${url}/api/movies/123456789`)
           .end( (res) => {
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(404);
             done();
           });
       });
@@ -227,7 +227,7 @@ describe('Movie Routes', function() {
       it('should respond with status 500', done => {
         request.delete(`${url}/api/movies/123456789`)
           .end( res => {
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(404);
             done();
           });
       });
