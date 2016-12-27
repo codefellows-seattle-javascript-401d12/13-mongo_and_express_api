@@ -52,7 +52,7 @@ describe('Movie Routes', function() {
         request.post(`${url}/api/movies`)
           .send({rating: 5})
           .end( res => {
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(400);
             done();
           });
       });
@@ -60,7 +60,7 @@ describe('Movie Routes', function() {
         request.post(`${url}/api/movies`)
           .send({name: 'Should fail'})
           .end( res => {
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(400);
             done();
           });
       });
@@ -68,7 +68,7 @@ describe('Movie Routes', function() {
         request.post(`${url}/api/movies`)
           .send({name: 5, rating:'ten'})
           .end( res => {
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(400);
             done();
           });
       });
