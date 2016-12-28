@@ -10,4 +10,4 @@ const movieSchema = Schema({
   directorID: { type: Schema.Types.ObjectId, required: true}
 });
 
-module.exports = mongoose.model('movies', movieSchema);
+module.exports = mongoose.model('movie', movieSchema);

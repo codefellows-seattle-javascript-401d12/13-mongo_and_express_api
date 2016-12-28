@@ -1,6 +1,6 @@
 'use strict';
 
-const Router = require('express').Require;
+const Router = require('express').Router;
 const jsonparser = require('body-parser').json();
 const createError = require('http-errors');
 const Director = require('../model/directors.js');
@@ -17,6 +17,19 @@ directorRouter.post('/api/director', jsonparser, function(req, res, next) {
     .then( director => res.json(director))
     .catch(next);
 });
+
+directorRouter.post('/api/director/:directorId/movie', jsonparser, function(req, res, next) {
+  debug('POST: /api/director/:directorId/movie');
+
+  Director.findByIdAndAddMovie(req.params.directorId, req.body)
+    .then( movies => {
+      debug('then - Director.findByIdAndAddMovie - 1st');
+
+      return res.json(movies);
+    })
+    .catch(next);
+});
+
 
 directorRouter.get('/api/director/:id', function(req, res, next) {
   debug('GET: /api/director/:id');
