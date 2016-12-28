@@ -15,8 +15,8 @@ const directorSchema = Schema({
 
 const Director = module.exports = mongoose.model('directors', directorSchema);
 
-Director.findByIdAndAddDirector = function(id, movie) {
-  debug('findByIdAndAddDirector');
+Director.findByIdAndAddMovie = function(id, movie) {
+  debug('findByIdAndAddMovie');
 
   return Director.findById(id)
     .catch(err => Promise.reject(createError(404, err.message)))
