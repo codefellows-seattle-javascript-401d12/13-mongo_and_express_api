@@ -8,9 +8,9 @@ const Schema = mongoose.Schema;
 const Movie = require('./movies.js');
 
 const directorSchema = Schema({
-  name: { type: String, require: true},
-  timestamp: { type: Date, require: true},
-  movies: [{ type: Schema.Types.ObjectId, ref: 'movies'}]
+  name: { type: String, required: true},
+  timestamp: { type: Date, required: true},
+  movies: [{ type: Schema.Types.ObjectId, ref: 'movie'}]
 });
 
 const Director = module.exports = mongoose.model('directors', directorSchema);
