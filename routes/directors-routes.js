@@ -2,19 +2,20 @@
 
 const Router = require('express').Router;
 const jsonparser = require('body-parser').json();
-const createError = require('http-errors');
 const Director = require('../model/directors.js');
 const debug = require('debug')('movies:directors-routes');
 const directorRouter = module.exports = new Router();
-
-
 
 directorRouter.post('/api/director', jsonparser, function(req, res, next) {
   debug('POST: /api/director');
 
   req.body.timestamp = new Date();
   new Director(req.body).save()
-    .then( director => res.json(director))
+    .then( director => {
+      debug('then - directorRouter.post - 1st');
+
+      res.json(director);
+    })
     .catch(next);
 });
 
@@ -36,7 +37,11 @@ directorRouter.get('/api/director/:id', function(req, res, next) {
 
   Director.findById(req.params.id)
     .populate('movies')
-    .then( director => res.json(director))
+    .then( director => {
+      debug('then - Director.findById - 1st');
+
+      res.json(director);
+    })
     .catch(next);
 });
 
@@ -44,7 +49,11 @@ directorRouter.put('/api/director/:id', jsonparser, function(req, res, next) {
   debug('PUT: /api/director/:id');
 
   Director.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then( director => req.json(director))
+    .then( director => {
+      debug('then - Director.findByIdAndUpdate - 1st');
+      
+      res.json(director);
+    })
     .catch(next);
 });
 
@@ -52,6 +61,10 @@ directorRouter.delete('/api/director/:id', function(req, res, next) {
   debug('DELETE: /api/director/:id');
 
   Director.findByIdAndRemove(req.params.id)
-    .then( () => res.status(204).end())
+    .then( () => {
+      debug('then - Director.findByIdAndRemove - 1st');
+
+      res.status(204).end();
+    })
     .catch(next);
 });

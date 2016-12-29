@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "DEBUG='movies*' mocha",
-    "start": "DEBUG='movies*' node server.js"
+    "start": "DEBUG='movies*' nodemon server.js"
   },
   "repository": {
     "type": "git",
