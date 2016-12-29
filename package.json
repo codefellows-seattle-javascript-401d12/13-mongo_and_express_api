@@ -30,5 +30,15 @@
     "url": "https://github.com/bhavyaab/13-mongo_and_express_api/issues"
   },
   "homepage": "https://github.com/bhavyaab/13-mongo_and_express_api#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "debug": "^2.6.0",
+    "express": "^4.14.0",
+    "http-errors": "^1.5.1",
+    "mongoose": "^4.7.5",
+    "morgan": "^1.7.0"
+  }
 }
