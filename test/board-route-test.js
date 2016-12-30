@@ -108,7 +108,7 @@ describe('Board Routes', function() {
     });
   });
 
-  describe('PUT: /api/board/id', function() {
+  describe('PUT: /api/board/:id', function() {
     describe('with a valid body', function() {
       before(done => {
         new Board(exampleBoard).save()
@@ -156,5 +156,35 @@ describe('Board Routes', function() {
     });
   });
 
-  
+  describe('DELETE: /api/board/:id', function() {
+    describe('with a valid body', function() {
+      before(done => {
+        new Board(exampleBoard).save()
+        .then(board => {
+          this.tempBoard = board;
+          done();
+        })
+        .catch(done);
+      });
+
+      it('should delete a board and return a 204 error', done => {
+        request.delete(`${url}/api/board/${this.tempBoard._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(204);
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid request', function() {
+      it('should return a 404 error', done => {
+        request.delete(`${url}/api/board/3988794549`)
+        .end(res => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
 });
