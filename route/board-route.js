@@ -23,7 +23,7 @@ boardRouter.get('/api/board/:id', function(req, res, next) {
   Board.findById(req.params.id)
   .populate('pins')
   .then(board => res.json(board))
-  .catch(next);
+  .catch(err => next(createError(404, err.message)));
 });
 
 boardRouter.put('/api/board/:id', jsonParser, function(req, res, next) {
@@ -35,6 +35,8 @@ boardRouter.put('/api/board/:id', jsonParser, function(req, res, next) {
 });
 
 boardRouter.delete('/api/board/:id', function(req, res, next) {
+  debug('DELETE: /api/board/:id');
+
   Board.findByIdAndRemove(req.params.id)
   .then(() => res.status(204).send())
   .catch(err => next(createError(404, err.message)));
