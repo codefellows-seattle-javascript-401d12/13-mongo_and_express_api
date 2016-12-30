@@ -3,7 +3,6 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const Director = require('../model/directors.js');
-const Movie = require('../model/movies.js');
 const PORT = process.env.PORT || 3000;
 
 const url = `http://localhost:${PORT}`;
