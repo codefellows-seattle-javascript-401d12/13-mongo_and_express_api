@@ -3,7 +3,7 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const Library = require('../model/library.js');
-const debug = require('debug')('library:book-route-test');
+require('debug')('library:book-route-test');
 
 const PORT = process.env.PORT || 3000;
 
@@ -23,23 +23,23 @@ const exampleBook = {
 
 describe('Book Routes', function(){
   describe('POST: /api/library/:libraryID/book', function(){
-      before(done => {
-        new Library(exampleLibrary).save()
-        .then( library => {
-          this.tempLibrary = library;
-          done();
-        });
-      });
-
-      after( done => {
-        if(this.tempLibrary){
-          this.tempLibrary.remove({})
-          .then( () => done())
-          .catch(done);
-          return;
-        }
+    before(done => {
+      new Library(exampleLibrary).save()
+      .then( library => {
+        this.tempLibrary = library;
         done();
       });
+    });
+
+    after( done => {
+      if(this.tempLibrary){
+        this.tempLibrary.remove({})
+        .then( () => done())
+        .catch(done);
+        return;
+      }
+      done();
+    });
 
     describe('with a valid body', () => {
       it('should return a valid body', done => {
@@ -53,7 +53,6 @@ describe('Book Routes', function(){
           done();
         });
       });
-
     });
 
     describe('with an invalid body', () => {
@@ -82,14 +81,14 @@ describe('Book Routes', function(){
     });
 
     after( done => {
-        if(this.tempLibrary){
-          this.tempLibrary.remove({})
-          .then(() => done())
-          .catch(done);
-          return;
-        }
-        done();
-      });
+      if(this.tempLibrary){
+        this.tempLibrary.remove({})
+        .then(() => done())
+        .catch(done);
+        return;
+      }
+      done();
+    });
 
     describe('with a valid body', () => {
       it('should return a book', done => {
@@ -153,11 +152,15 @@ describe('Book Routes', function(){
         });
       });
       it('should return not found', done => {
+        let updated = {title: 'new book', author: 'new author'};
+
         request.put(`${url}/api/library/${this.tempLibrary._id}/book/58659b018078183ddcbdd26f`)
+        .send(updated)
         .end(res => {
           expect(res.status).to.equal(404);
+          expect(res.body).to.equal(undefined);
           done();
-        })
+        });
       });
     });
     describe('with an invalid body', () => {
@@ -190,6 +193,7 @@ describe('Book Routes', function(){
         .send(updated)
         .end(res => {
           expect(res.status).to.equal(400);
+          expect(res.body).to.equal(undefined);
           done();
         });
       });

@@ -38,12 +38,10 @@ bookRouter.get('/api/library/:libraryID/book/:id', function(req,res,next){
 bookRouter.put('/api/library/:libraryID/book/:id', jsonParser, function(req,res,next){
   debug('PUT: /api/library/:libraryID/book/:id');
 
-
-  // if(res.body === null) return next(createError(400));
-  Library.findById(req.params.listID)
+  Library.findById(req.params.libraryID)
   .then(() => Book.findByIdAndUpdate(req.params.id, req.body, {new: true}))
   .then(book => {
-    // if(req.body === null) return next(createError(400));
+    if(req.body.title === undefined) return next(createError(400));
     if(book === null) return next(createError(404));
     res.json(book);
   })
@@ -57,7 +55,7 @@ bookRouter.delete('/api/library/:libraryID/book/:id', function(req,res,next){
   debug('DELETE: /api/library/:libraryID/book/:id');
 
   Library.findById(req.params.libraryID)
-  .then(() => Library.findByIdAndRemove(req.params.id))
+  .then(() => Book.findByIdAndRemove(req.params.id))
   .then( () => res.status(204).send())
   .catch(err => next(createError(404,err.message)));
 });

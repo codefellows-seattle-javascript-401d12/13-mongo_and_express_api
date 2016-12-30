@@ -35,12 +35,11 @@ libraryRouter.get('/api/library/:id', function(req,res,next){
 libraryRouter.put('/api/library/:id', jsonParser, function(req,res,next){
   debug('PUT: /api/library/:id');
 
+  if(req.body.name === undefined) return next(createError(400));
   Library.findByIdAndUpdate(req.params.id, req.body,{new:true})
   .then(library => {
-    console.log('request', req.body);
-    if(!req.body) return next(createError(400));
     if(library === null) return next(createError(404));
-    res.json(library)
+    res.json(library);
   })
   .catch( err => {
     if(err.name === 'ValidationError') return next(err);

@@ -11,7 +11,7 @@ const bookRouter = require('./route/book-route.js');
 const errors = require('./lib/err-middleware.js');
 
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = 'mongodb://localhost/library';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/library';
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);

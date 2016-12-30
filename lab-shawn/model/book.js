@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const debug = require('debug')('library:book');
+require('debug')('library:book');
 
 const bookSchema = Schema({
   title: {type: String, required: true},
