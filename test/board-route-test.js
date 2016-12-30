@@ -35,7 +35,7 @@ describe('Board Routes', function() {
 
       it('should return a board', done => {
         request.post(`${url}/api/board`)
-        .send(examplePin)
+        .send(exampleBoard)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
@@ -90,8 +90,8 @@ describe('Board Routes', function() {
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal('test board');
           expect(res.body.pins.length).to.equal(1);
-          expect(res.body.pin[0].title).to.equal(examplePin.title);
-          expect(res.body.pin[0].skill).to.equal(examplePin.skill);
+          expect(res.body.pins[0].title).to.equal(examplePin.title);
+          expect(res.body.pins[0].skill).to.equal(examplePin.skill);
           done();
         });
       });
@@ -108,5 +108,53 @@ describe('Board Routes', function() {
     });
   });
 
-  describe('PUT: /api/board/id')
+  describe('PUT: /api/board/id', function() {
+    describe('with a valid body', function() {
+      before(done => {
+        new Board(exampleBoard).save()
+        .then(board => {
+          this.tempBoard = board;
+          done();
+        })
+        .catch(done);
+      });
+
+      after(done => {
+        if (this.tempBoard) {
+          Board.remove({})
+          .then(() => done())
+          .catch(done);
+          return;
+        }
+        done();
+      });
+
+      it('should return a board', done => {
+        var updated = {name: 'updated name'};
+
+        request.put(`${url}/api/board/${this.tempBoard._id}`)
+        .send(updated)
+        .end((err, res) => {
+          if (err) return done(err);
+          let timestamp = new Date(res.body.timestamp);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(updated.name);
+          expect(timestamp.toString()).to.equal(exampleBoard.timestamp.toString());
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid request', function() {
+      it('should return a 404 error', done => {
+        request.put(`${url}/api/board/3988794549`)
+        .end(res => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
+
+  
 });

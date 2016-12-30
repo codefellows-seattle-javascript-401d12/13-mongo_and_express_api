@@ -31,7 +31,7 @@ boardRouter.put('/api/board/:id', jsonParser, function(req, res, next) {
 
   Board.findByIdAndUpdate(req.params.id, req.body, {new: true})
   .then(board => res.json(board))
-  .catch(next);
+  .catch(err => next(createError(404, err.message)));
 });
 
 boardRouter.delete('/api/board/:id', function(req, res, next) {

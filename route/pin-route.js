@@ -31,7 +31,7 @@ pinRouter.put('/api/pin/:id', jsonParser, function(req, res, next) {
   req.body.timestamp = new Date();
   Pin.findByIdAndUpdate(req.params.id, req.body, {new: true})
   .then(pin => res.json(pin))
-  .catch(next);
+  .catch(err => next(createError(404, err.message)));
 });
 
 pinRouter.delete('/api/pin/:id', function(req, res, next) {
@@ -39,5 +39,5 @@ pinRouter.delete('/api/pin/:id', function(req, res, next) {
 
   Pin.findByIdAndRemove(req.params.id)
   .then(() => res.status(204).send())
-  .catch(next);
+  .catch(err => next(createError(404, err.message)));
 });
