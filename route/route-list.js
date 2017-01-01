@@ -12,8 +12,9 @@ const listRoute = module.exports = new Router();
 
 listRoute.post('/api/list', jsonParser, function(req, res, next){
   debug('POST: /api/list');
+  if(!req.body) res.status(400).send('bad request');
   req.body.timestamp = new Date();
-  console.log(typeof(req.body));
+
   new List(req.body).save()
   .then( list => res.json(list))
   .catch(next);
@@ -30,21 +31,38 @@ listRoute.get('/api/list/:id', function(req, res, next){
   })
   .catch(next);
 });
+listRoute.get('/api/list', function(req, res, next){
+  debug('GET: /api/list');
+
+  List.find({}, function(err, list){
+    if(err) res.status(500).send(err);
+
+    if(!list[0]) res.status(404).send('container empty');
+    if(list[0]) res.json(list);
+  })
+  .catch(next);
+});
 
 listRoute.put('/api/list', jsonParser, function(req, res, next){
   debug('PUT: /api/list');
+  if(!req.body || !req.body.id) res.status(400).send('bad request');
   req.body.timestamp = new Date();
 
-  List.findById(req.body.id, function(err, list){
-    if (err) res.status(404).send(err);
+  if(req.body.id){
+    List.findById(req.body.id, function(err, list){
+      if (!list) return res.status(404).send('id not found');//unsolved error: mongoose error out because of envalid id.
+      if(err) return res.status(500).send(err);
 
-    for(var prop in req.body){
-      list[prop] = req.body[prop];
-    }
-    list.save();
-    res.json(list);
-  })
-  .catch(next);
+      if(list){
+        for(var prop in req.body){
+          list[prop] = req.body[prop];
+        }
+        list.save();
+        return res.json(list);
+      }
+    })
+    .catch(next);
+  }
 });
 
 listRoute.delete('/api/list/:id', function(req, res, next){
