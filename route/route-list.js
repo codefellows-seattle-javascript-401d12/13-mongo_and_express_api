@@ -49,17 +49,10 @@ listRoute.put('/api/list', jsonParser, function(req, res, next){
   req.body.timestamp = new Date();
 
   if(req.body.id){
-    List.findById(req.body.id, function(err, list){
-      if (!list) return res.status(404).send('id not found');//unsolved error: mongoose error out because of envalid id.
-      if(err) return res.status(500).send(err);
-
-      if(list){
-        for(var prop in req.body){
-          list[prop] = req.body[prop];
-        }
-        list.save();
-        return res.json(list);
-      }
+    List.findByIdAndUpdate(req.body.id, req.body, {new:true} )
+    .then( list => {
+      if (!list) return res.status(404).send('id not found');
+      res.json(list);
     })
     .catch(next);
   }
