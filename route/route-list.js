@@ -3,8 +3,8 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const List = require('../model/list.js');
-const createError = require('http-errors');
-const Promise = require('bluebird');
+// const createError = require('http-errors');
+// const Promise = require('bluebird');
 const debug = require('debug')('list:route');
 
 
@@ -19,11 +19,15 @@ listRoute.post('/api/list', jsonParser, function(req, res, next){
   .catch(next);
 });
 
-listRoute.get('/api/list', function(req, res, next){
-  debug('GET: /api/list');
+listRoute.get('/api/list/:id', function(req, res, next){
+  debug('GET: /api/list/:id');
 
-  List.findById(req.query.id)
-  .then( list => res.json(list))
+  List.findById(req.params.id, function(err, list){
+    if(err) res.status(500).send(err);
+
+    if(list === null) res.status(404).send(err);
+    if(list !== null) res.json(list);
+  })
   .catch(next);
 });
 
@@ -32,7 +36,7 @@ listRoute.put('/api/list', jsonParser, function(req, res, next){
   req.body.timestamp = new Date();
 
   List.findById(req.body.id, function(err, list){
-    if (err) res.status(500).send(err);
+    if (err) res.status(404).send(err);
 
     for(var prop in req.body){
       list[prop] = req.body[prop];
@@ -43,17 +47,17 @@ listRoute.put('/api/list', jsonParser, function(req, res, next){
   .catch(next);
 });
 
-listRoute.delete('/api/list', function(req, res, next){
-  debug('DELETE: /api/list');
-  List.findByIdAndRemove(req.query.id, function (err, list) {
-    if(err || (list == null)) return Promise.reject(createError(404, 'id not found!'));
+listRoute.delete('/api/list/:id', function(req, res, next){
+  debug('DELETE: /api/list/:id');
+  List.findByIdAndRemove(req.params.id, function (err, list) {
+    if(err) return res.status(500).send(err);
+    if(list === null) return res.status(404).send(err);
 
     var response = {
       message: 'successfully deleted',
       id: list._id
     };
-    Promise.resolve(response);
+    return res.json(response);
   })
-  .then(response => res.json(response))
   .catch(next);
 });
