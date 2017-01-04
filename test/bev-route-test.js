@@ -20,5 +20,46 @@ const exampleVehicle = {
 };
 
 describe('BEV routes', function() {
-  // TODO: build out tests
+  describe('POST: /api/bev', function() {
+    describe('with a valid body', function() {
+      after( done => {
+        if (this.tempVehicle) {
+          BEV.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        };
+        done();
+      });
+
+      it('should return data for a vehicle', done => {
+        request.post(`${url}/api/bev`)
+        .send(exampleVehicle)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.vehicle).to.equal('test vehicle');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET: /api/bev/:id', function() {
+    describe('with a valid body', function() {
+      // TODO: build out GET test
+    });
+  });
+
+  describe('PUT: /api/bev/:id', function() {
+    describe('with a valid body', function() {
+      // TODO: build out PUT test
+    });
+  });
+
+  describe('DELETE: /api/bev/:id', function() {
+    describe('with a valid body', function() {
+      // TODO: build out DELETE test
+    });
+  });
 });
