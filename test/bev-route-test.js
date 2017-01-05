@@ -81,6 +81,12 @@ describe('BEV routes', function() {
     });
   });
 
+  describe('GET: /api/bev/', function() {
+    describe('with a valid request and data existing in the database', function() {
+      // TODO: build out fetch all ids test
+    });
+  });
+
   describe('PUT: /api/bev/:id', function() {
     describe('with a valid body', function() {
       before( done => {
