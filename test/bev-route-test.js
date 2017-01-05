@@ -16,7 +16,7 @@ const exampleVehicle = {
   msrp: 35000,
   range: 200,
   mpge: 100,
-  lastupdated: new Date(),
+  lastupdated: new Date()
 };
 
 describe('BEV routes', function() {
@@ -83,7 +83,46 @@ describe('BEV routes', function() {
 
   describe('PUT: /api/bev/:id', function() {
     describe('with a valid body', function() {
-      // TODO: build out PUT test
+      before( done => {
+        exampleVehicle.lastupdated = new Date();
+        new BEV(exampleVehicle).save()
+        .then( vehicle => {
+          this.tempVehicle = vehicle;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        if (this.tempVehicle) {
+          BEV.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        };
+        done();
+      });
+
+      it('should return data for a vehicle', done => {
+        var updatedVehicle = {
+          vehicle: 'updated vehicle',
+          info: 'updated info',
+          lastupdated: new Date()
+        };
+
+        request.put(`${url}/api/bev/${this.tempVehicle._id}`)
+        .send(updatedVehicle)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.vehicle).to.equal(updatedVehicle.vehicle);
+          // expect the two timestamps to differ by a few milliseconds
+          expect(res.body.lastupdated).to.not.equal(exampleVehicle.lastupdated.toISOString());
+          // aside from milliseconds section, expect the two timestamps to be identical
+          expect(res.body.lastupdated.split(':')[0]).to.equal(exampleVehicle.lastupdated.toISOString().split(':')[0]);
+          done();
+        })
+      })
     });
   });
 
