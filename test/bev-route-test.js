@@ -127,8 +127,8 @@ describe('BEV routes', function() {
           // aside from milliseconds section, expect the two timestamps to be identical
           expect(res.body.lastupdated.split(':')[0]).to.equal(exampleVehicle.lastupdated.toISOString().split(':')[0]);
           done();
-        })
-      })
+        });
+      });
     });
   });
 
@@ -153,8 +153,8 @@ describe('BEV routes', function() {
           expect(res.body).to.be.an('object');
           expect(res.body).to.be.empty;
           done();
-        })
-      })
+        });
+      });
     });
   });
 });
