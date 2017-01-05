@@ -9,7 +9,7 @@ const bevSchema = Schema({
   msrp: { type: Number, required: true },
   range: { type: Number, required: true },
   mpge: { type: Number, required: true },
-  lastupdated: { type: Date, required: true }
+  lastupdated: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('bev', bevSchema);
