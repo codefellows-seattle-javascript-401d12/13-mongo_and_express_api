@@ -128,7 +128,27 @@ describe('BEV routes', function() {
 
   describe('DELETE: /api/bev/:id', function() {
     describe('with a valid body', function() {
-      // TODO: build out DELETE test
+      before( done => {
+        exampleVehicle.lastupdated = new Date();
+        new BEV(exampleVehicle).save()
+        .then( vehicle => {
+          this.tempVehicle = vehicle;
+          done();
+        })
+        .catch(done);
+      });
+
+      it('should return a 204 \'no content\' status', done => {
+        request.delete(`${url}/api/bev/${this.tempVehicle._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(204);
+          expect(res.res.statusMessage).to.equal('No Content');
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.be.empty;
+          done();
+        })
+      })
     });
   });
 });
