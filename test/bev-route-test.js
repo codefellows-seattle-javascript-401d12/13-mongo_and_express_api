@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const request = require('superagent');
-const List = require('../model/bev.js');
+const BEV = require('../model/bev.js');
 
 const PORT = process.env.PORT || 3000;
 
@@ -47,7 +47,37 @@ describe('BEV routes', function() {
 
   describe('GET: /api/bev/:id', function() {
     describe('with a valid body', function() {
-      // TODO: build out GET test
+      before( done => {
+        exampleVehicle.lastupdated = new Date();
+        new BEV(exampleVehicle).save()
+        .then( vehicle => {
+          this.tempVehicle = vehicle;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        if (this.tempVehicle) {
+          BEV.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        };
+        done();
+      });
+
+      it('should return data for a vehicle', done => {
+        request.get(`${url}/api/bev/${this.tempVehicle._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.vehicle).to.equal('test vehicle');
+          expect(res.body.msrp).to.be.a('number');
+          expect(res.body.lastupdated.split('-')[0]).to.equal(new Date().getFullYear().toString());
+          done();
+        });
+      });
     });
   });
 
