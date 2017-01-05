@@ -20,6 +20,13 @@ bevRouter.get('/api/bev/:id', function(req, res, next) {
   .catch( err => next(createError(404, err.message)));
 });
 
+bevRouter.get('/api/bev/', function(req, res, next) {
+  BEV.find({})
+  .then( vehicles => vehicles.map(vehicle => vehicle._id))
+  .then( vehicles => res.json(vehicles))
+  .catch( err => next(createError(404, err.message)));
+});
+
 bevRouter.put('/api/bev/:id', parseJSON, function(req, res, next) {
   BEV.findByIdAndUpdate(req.params.id, req.body, { new: true })
   .then( vehicle => res.json(vehicle))
