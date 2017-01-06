@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const debug = require('debug')('bev:server');
 
 const bevRouter = require('./route/bev-route.js');
+const reviewRouter = require('./route/review-route.js');
 const errors = require('./lib/error-middleware.js');
 
 const app = express();
@@ -20,6 +21,7 @@ mongoose.connect(MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bevRouter);
+app.use(reviewRouter);
 app.use(errors);
 
 app.listen(PORT, () => {
