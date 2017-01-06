@@ -2,7 +2,7 @@
 
 const Router = require('express').Router;
 const parseJSON = require('body-parser').json();
-const Review = require('../model/review.js');
+const BEV = require('../model/bev.js');
 
 const reviewRouter = module.exports = new Router();
 
