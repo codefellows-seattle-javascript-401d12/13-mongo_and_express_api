@@ -28,6 +28,7 @@ bevRouter.get('/api/bev/', function(req, res, next) {
 });
 
 bevRouter.put('/api/bev/:id', parseJSON, function(req, res, next) {
+  if (Object.getOwnPropertyNames(req.body).length === 0) return next(createError(400, 'Bad Request'));
   BEV.findByIdAndUpdate(req.params.id, req.body, { new: true })
   .then( vehicle => res.json(vehicle))
   .catch( err => {
