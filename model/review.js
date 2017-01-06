@@ -18,7 +18,7 @@ const reviewSchema = Schema ({
     }
   },
   createdOn: { type: Date, default: Date.now },
-  reviewID: { type: Schema.Types.ObjectId, required: true }
+  vehicleID: { type: Schema.Types.ObjectId, required: true }
 });
 
 module.exports = mongoose.model('review', reviewSchema);
