@@ -18,6 +18,14 @@ const exampleReview = {
   rating: 8,
 };
 
+const invalidExampleReview = {
+  title: 'test review',
+  authorName: 'Joe',
+  reviewText: 'test review text',
+  // non-integer rating value will throw validation error
+  rating: 3.5,
+};
+
 const exampleVehicle = {
   vehicle: 'test vehicle',
   info: 'test info',
@@ -57,6 +65,75 @@ describe('Review Routes', function() {
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(exampleReview.name);
           expect(res.body.vehicleID).to.equal(this.tempVehicle._id.toString());
+          done();
+        });
+      });
+    });
+
+    describe('with a valid \'vehicle\' object and an invalid body', function() {
+      before( done => {
+        new BEV(exampleVehicle).save()
+        .then( vehicle => {
+          this.tempVehicle = vehicle;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        Promise.all([
+          BEV.remove({}),
+          Review.remove({})
+        ])
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a 400 \'bad request\' status', done => {
+        request.post(`${url}/api/bev/${this.tempVehicle._id}/review`)
+        .send(invalidExampleReview)
+        .end((err, res) => {
+          expect(err.status).to.equal(400);
+          expect(res.status).to.equal(400);
+          expect(res.res.statusMessage).to.equal('Bad Request');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET: /api/bev/:vehicleID/review', function() {
+    describe('with a valid body', function() {
+      before( done => {
+        new BEV(exampleVehicle).save()
+        .then( vehicle => {
+          this.tempVehicle = vehicle;
+          return BEV.findByIdAndAddReview(vehicle._id, exampleReview);
+        })
+        .then( review => {
+          this.tempReview = review;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        Promise.all([
+          BEV.remove({}),
+          Review.remove({})
+        ])
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a review', done => {
+        request.get(`${url}/api/bev/${this.tempVehicle._id}/review/${this.tempReview._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body._id).to.equal(this.tempReview._id.toString());
+          expect(res.body.vehicleID).to.equal(this.tempVehicle._id.toString());
+          expect(res.body.authorName).to.equal('Joe');
           done();
         });
       });
