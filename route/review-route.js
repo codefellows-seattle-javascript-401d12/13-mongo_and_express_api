@@ -17,7 +17,7 @@ reviewRouter.post('/api/bev/:vehicleID/review', parseJSON, function(req, res, ne
 reviewRouter.get('/api/bev/:vehicleID/review/:id', function(req, res, next) {
   Review.findById(req.params.id)
   .then( review => {
-    if (review === null) return next(createError(400, 'Bad Request'));
+    if (review === null) return next(createError(404, err.message));
     res.json(review);
   })
   .catch( err => next(createError(404, err.message)));
