@@ -138,5 +138,39 @@ describe('Review Routes', function() {
         });
       });
     });
+
+    describe('with a valid vehicle id and an invalid review id', function() {
+      before( done => {
+        new BEV(exampleVehicle).save()
+        .then( vehicle => {
+          this.tempVehicle = vehicle;
+          return BEV.findByIdAndAddReview(vehicle._id, exampleReview);
+        })
+        .then( review => {
+          this.tempReview = review;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        Promise.all([
+          BEV.remove({}),
+          Review.remove({})
+        ])
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a 404 \'not found\' status', done => {
+        request.get(`${url}/api/bev/${this.tempVehicle._id}/review/${this.tempVehicle._id}`)
+        .end((err, res) => {
+          expect(err.status).to.equal(404);
+          expect(res.status).to.equal(404);
+          expect(res.res.statusMessage).to.equal('Not Found');
+          done();
+        });
+      });
+    });
   });
 });
