@@ -17,7 +17,7 @@ Each vehicle object has 5 user-editable properties:
   * range -- Vehicle's EPA-rated range on a full charge, in miles. **Must be a number.**
   * mpge -- Vehicle's EPA-rated "miles-per-gallon equivalent" (MPGe). **Must be a number.**
 
-Each review object has 5 user-editable properties:
+Each review object has 4 user-editable properties:
   * title -- Title or headline of review. **Must be a string.**
   * authorName -- Reviewer's name or handle. **Must be a string.**
   * reviewText -- Main body text of the review. **Must be a string.**
