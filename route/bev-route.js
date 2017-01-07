@@ -17,7 +17,10 @@ bevRouter.post('/api/bev', parseJSON, function(req, res, next) {
 bevRouter.get('/api/bev/:id', function(req, res, next) {
   BEV.findById(req.params.id)
   .populate('reviews')
-  .then( vehicle => res.json(vehicle))
+  .then( vehicle => {
+    if (vehicle === null) return next(createError(404, err.message));
+    res.json(vehicle);
+  })
   .catch( err => next(createError(404, err.message)));
 });
 
@@ -31,7 +34,10 @@ bevRouter.get('/api/bev/', function(req, res, next) {
 bevRouter.put('/api/bev/:id', parseJSON, function(req, res, next) {
   if (Object.getOwnPropertyNames(req.body).length === 0) return next(createError(400, 'Bad Request'));
   BEV.findByIdAndUpdate(req.params.id, req.body, { new: true })
-  .then( vehicle => res.json(vehicle))
+  .then( vehicle => {
+    if (vehicle === null) return next(createError(404, err.message));
+    res.json(vehicle);
+  })
   .catch( err => {
     if (err.name === 'ValidationError') return next(err);
     next(createError(404, err.message));
@@ -40,6 +46,9 @@ bevRouter.put('/api/bev/:id', parseJSON, function(req, res, next) {
 
 bevRouter.delete('/api/bev/:id', function(req, res, next) {
   BEV.findByIdAndRemove(req.params.id)
-  .then( () => res.status(204).send())
+  .then( vehicle => {
+    if (vehicle === null) return next(createError(404, err.message));
+    res.status(204).send();
+  })
   .catch( err => next(createError(404, err.message)));
 });
