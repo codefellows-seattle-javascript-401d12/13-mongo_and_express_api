@@ -16,6 +16,7 @@ bevRouter.post('/api/bev', parseJSON, function(req, res, next) {
 
 bevRouter.get('/api/bev/:id', function(req, res, next) {
   BEV.findById(req.params.id)
+  .populate('reviews')
   .then( vehicle => res.json(vehicle))
   .catch( err => next(createError(404, err.message)));
 });
