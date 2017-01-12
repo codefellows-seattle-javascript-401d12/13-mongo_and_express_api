@@ -194,8 +194,8 @@ describe('BEV routes', function() {
           expect(res.body).to.be.an('array');
           expect(res.body).to.include(this.tempVehicle._id.toString());
           done();
-        })
-      })
+        });
+      });
     });
   });
 
@@ -207,8 +207,8 @@ describe('BEV routes', function() {
           expect(err).to.be.an('error');
           expect(res.status).to.equal(416);
           done();
-        })
-      })
+        });
+      });
     });
   });
 
