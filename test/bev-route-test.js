@@ -199,6 +199,20 @@ describe('BEV routes', function() {
     });
   });
 
+  describe('GET: /api/bev/', function() {
+    describe('with a valid request and NO data existing in the database', function() {
+      it('should return an error', done => {
+        request.get(`${url}/api/bev`)
+        .end((err, res) => {
+          expect(res.status).to.equal(416);
+          // expect(res.body).to.be.an('array');
+          // expect(res.body).to.be.empty;
+          done();
+        })
+      })
+    });
+  });
+
   describe('PUT: /api/bev/:id', function() {
     describe('with a valid body', function() {
       before( done => {
