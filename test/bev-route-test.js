@@ -204,9 +204,8 @@ describe('BEV routes', function() {
       it('should return an error', done => {
         request.get(`${url}/api/bev`)
         .end((err, res) => {
+          expect(err).to.be.an('error');
           expect(res.status).to.equal(416);
-          // expect(res.body).to.be.an('array');
-          // expect(res.body).to.be.empty;
           done();
         })
       })
