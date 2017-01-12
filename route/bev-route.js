@@ -26,9 +26,11 @@ bevRouter.get('/api/bev/:id', function(req, res, next) {
 
 bevRouter.get('/api/bev/', function(req, res, next) {
   BEV.find({})
-  .then( vehicles => vehicles.map(vehicle => vehicle._id))
-  .then( vehicles => res.json(vehicles))
-  .catch( err => next(createError(404, err.message)));
+  .then( vehicles => {
+    if (vehicles.length === 0) return Promise.reject(createError(416, 'Out of range'));
+    res.json(vehicles.map(vehicle => vehicle._id));
+  })
+  .catch( err => next(err));
 });
 
 bevRouter.put('/api/bev/:id', parseJSON, function(req, res, next) {

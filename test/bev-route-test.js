@@ -194,8 +194,21 @@ describe('BEV routes', function() {
           expect(res.body).to.be.an('array');
           expect(res.body).to.include(this.tempVehicle._id.toString());
           done();
-        })
-      })
+        });
+      });
+    });
+  });
+
+  describe('GET: /api/bev/', function() {
+    describe('with a valid request and NO data existing in the database', function() {
+      it('should return an error', done => {
+        request.get(`${url}/api/bev`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(416);
+          done();
+        });
+      });
     });
   });
 
